@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Be My Valentine 💘</title>
+<title>Something for You 💗</title>
 
 <style>
   * {
@@ -14,7 +14,7 @@
   body {
     margin: 0;
     height: 100vh;
-    background: linear-gradient(135deg, #ffd1dc, #ffe6f0);
+    background: linear-gradient(135deg, #ffe4ec, #fff0f5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,31 +28,15 @@
   }
 
   h1 {
-    color: #d6004f;
-    font-size: 2rem;
+    color: #c4004a;
+    font-size: 1.8rem;
+    min-height: 70px;
   }
 
-  .meter {
-    margin: 25px 0;
-    background: #fff;
-    border-radius: 20px;
-    overflow: hidden;
-    height: 20px;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-  }
-
-  .fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #ff4f81, #ff85a2);
-    transition: width 0.4s ease;
-  }
-
-  .message {
-    color: #b40045;
-    min-height: 40px;
-    margin-top: 10px;
-    font-size: 1.05rem;
+  .shy-heart {
+    font-size: 3rem;
+    margin: 15px 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
   }
 
   .buttons {
@@ -60,28 +44,34 @@
   }
 
   button {
-    padding: 12px 28px;
-    font-size: 1.1rem;
+    padding: 12px 26px;
+    font-size: 1.05rem;
     border: none;
-    border-radius: 30px;
+    border-radius: 25px;
     cursor: pointer;
-    margin: 10px;
+    margin: 8px;
   }
 
   #yesBtn {
-    background: #ff2f6e;
+    background: #ff4f81;
     color: white;
+    box-shadow: 0 0 10px rgba(255, 79, 129, 0.5);
+    transition: box-shadow 0.4s ease;
+  }
+
+  #yesBtn.glow {
+    box-shadow: 0 0 18px rgba(255, 79, 129, 0.9);
   }
 
   #noBtn {
-    background: #aaa;
-    color: white;
+    background: #ccc;
+    color: #555;
   }
 
   .heart {
     position: fixed;
     bottom: -20px;
-    font-size: 24px;
+    font-size: 22px;
     animation: floatUp 4s linear forwards;
   }
 
@@ -97,67 +87,54 @@
 <body>
 
 <div class="container">
-  <h1>Will you be my Valentine? 💘</h1>
+  <h1 id="text">I wanted to ask you something…</h1>
 
-  <div class="meter">
-    <div class="fill" id="fill"></div>
-  </div>
-
-  <div class="message" id="message"></div>
+  <div class="shy-heart" id="shyHeart">💗</div>
 
   <div class="buttons">
-    <button id="yesBtn">YES 💖</button>
-    <button id="noBtn">NO 🙃</button>
+    <button id="yesBtn">Yes?</button>
+    <button id="noBtn">No…</button>
   </div>
 </div>
 
-<audio id="pop" src="https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-alert-notification-2357.mp3"></audio>
-<audio id="yay" src="https://assets.mixkit.co/sfx/preview/mixkit-happy-pop-2060.mp3"></audio>
-
 <script>
-  const noBtn = document.getElementById("noBtn");
+  const text = document.getElementById("text");
+  const heart = document.getElementById("shyHeart");
   const yesBtn = document.getElementById("yesBtn");
-  const fill = document.getElementById("fill");
-  const message = document.getElementById("message");
-  const pop = document.getElementById("pop");
-  const yay = document.getElementById("yay");
+  const noBtn = document.getElementById("noBtn");
 
-  let progress = 0;
-  const messages = [
-    "Hmm… my heart doesn’t believe that 🤭",
-    "That sounded shy, not serious 😌",
-    "Okay but look… it’s filling up 💗",
-    "At this point it’s destiny 😏",
-    "Yeahhh this was already decided 🥰"
+  let noCount = 0;
+
+  const noTexts = [
+    "oh—okay…",
+    "maybe I asked too fast…",
+    "I just think you’re really special…",
+    "it’s okay… you don’t have to decide yet 💗"
   ];
 
   noBtn.addEventListener("click", () => {
-    pop.play();
-    if (progress < 100) {
-      progress += 20;
-      fill.style.width = progress + "%";
-      message.textContent = messages[Math.min(progress / 20 - 1, messages.length - 1)];
-    }
+    noCount++;
+    heart.style.transform = "scale(0.8)";
+    heart.style.opacity = "0.7";
+    text.textContent = noTexts[Math.min(noCount - 1, noTexts.length - 1)];
 
-    if (progress >= 100) {
-      noBtn.style.display = "none";
-      message.textContent = "Looks like it’s already decided 💖";
+    if (noCount >= 3) {
+      yesBtn.classList.add("glow");
     }
   });
 
   yesBtn.addEventListener("click", () => {
-    yay.play();
-    document.body.innerHTML = "<h1 style='color:#ff2f6e;text-align:center;'>I knew it 🥰💖</h1>";
+    document.body.innerHTML = "<h1 style='color:#ff4f81;text-align:center;'>thank you for making my day 💕<br>will you be my valentine?</h1>";
 
     setInterval(() => {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.textContent = "💗";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.fontSize = (20 + Math.random() * 30) + "px";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
-    }, 150);
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = "💗";
+      h.style.left = Math.random() * 100 + "vw";
+      h.style.fontSize = (20 + Math.random() * 30) + "px";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 4000);
+    }, 180);
   });
 </script>
 
