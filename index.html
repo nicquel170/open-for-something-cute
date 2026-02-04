@@ -14,7 +14,7 @@
   body {
     margin: 0;
     height: 100vh;
-    background: linear-gradient(135deg, #ffb6c1, #ffd6e7);
+    background: linear-gradient(135deg, #ffd1dc, #ffe6f0);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,55 +24,42 @@
   .container {
     text-align: center;
     padding: 20px;
+    max-width: 320px;
   }
 
   h1 {
     color: #d6004f;
     font-size: 2rem;
-    margin-bottom: 25px;
   }
 
-  .heart {
-    width: 140px;
-    height: 140px;
-    background: pink;
-    position: relative;
-    transform: rotate(-45deg);
-    margin: 0 auto 20px;
-    animation: pulse 1.5s infinite;
+  .meter {
+    margin: 25px 0;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 20px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
   }
 
-  .heart::before,
-  .heart::after {
-    content: "";
-    width: 140px;
-    height: 140px;
-    background: pink;
-    border-radius: 50%;
-    position: absolute;
+  .fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff4f81, #ff85a2);
+    transition: width 0.4s ease;
   }
 
-  .heart::before {
-    top: -70px;
-    left: 0;
-  }
-
-  .heart::after {
-    left: 70px;
-    top: 0;
-  }
-
-  @keyframes pulse {
-    0% { transform: rotate(-45deg) scale(1); }
-    50% { transform: rotate(-45deg) scale(1.1); }
-    100% { transform: rotate(-45deg) scale(1); }
+  .message {
+    color: #b40045;
+    min-height: 40px;
+    margin-top: 10px;
+    font-size: 1.05rem;
   }
 
   .buttons {
-    margin-top: 10px;
+    margin-top: 20px;
   }
 
-  #yesBtn, #noBtn {
+  button {
     padding: 12px 28px;
     font-size: 1.1rem;
     border: none;
@@ -84,23 +71,14 @@
   #yesBtn {
     background: #ff2f6e;
     color: white;
-    box-shadow: 0 0 10px rgba(255, 47, 110, 0.6);
-    transition: transform 0.3s ease;
   }
 
   #noBtn {
-    background: #888;
+    background: #aaa;
     color: white;
   }
 
-  #hint {
-    margin-top: 15px;
-    color: #c4004a;
-    font-size: 1.1rem;
-    min-height: 24px;
-  }
-
-  .heart-float {
+  .heart {
     position: fixed;
     bottom: -20px;
     font-size: 24px;
@@ -108,8 +86,10 @@
   }
 
   @keyframes floatUp {
-    from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(-120vh); opacity: 0; }
+    to {
+      transform: translateY(-120vh);
+      opacity: 0;
+    }
   }
 </style>
 </head>
@@ -119,43 +99,59 @@
 <div class="container">
   <h1>Will you be my Valentine? 💘</h1>
 
-  <div class="heart"></div>
+  <div class="meter">
+    <div class="fill" id="fill"></div>
+  </div>
+
+  <div class="message" id="message"></div>
 
   <div class="buttons">
     <button id="yesBtn">YES 💖</button>
-    <button id="noBtn">NO 😐</button>
+    <button id="noBtn">NO 🙃</button>
   </div>
-
-  <div id="hint"></div>
 </div>
 
-<!-- Sounds -->
-<audio id="popSound" src="https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-alert-notification-2357.mp3"></audio>
-<audio id="yaySound" src="https://assets.mixkit.co/sfx/preview/mixkit-happy-pop-2060.mp3"></audio>
+<audio id="pop" src="https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-alert-notification-2357.mp3"></audio>
+<audio id="yay" src="https://assets.mixkit.co/sfx/preview/mixkit-happy-pop-2060.mp3"></audio>
 
 <script>
-  const yesBtn = document.getElementById("yesBtn");
   const noBtn = document.getElementById("noBtn");
-  const hint = document.getElementById("hint");
-  const popSound = document.getElementById("popSound");
-  const yaySound = document.getElementById("yaySound");
+  const yesBtn = document.getElementById("yesBtn");
+  const fill = document.getElementById("fill");
+  const message = document.getElementById("message");
+  const pop = document.getElementById("pop");
+  const yay = document.getElementById("yay");
 
-  let yesScale = 1;
+  let progress = 0;
+  const messages = [
+    "Hmm… my heart doesn’t believe that 🤭",
+    "That sounded shy, not serious 😌",
+    "Okay but look… it’s filling up 💗",
+    "At this point it’s destiny 😏",
+    "Yeahhh this was already decided 🥰"
+  ];
 
   noBtn.addEventListener("click", () => {
-    popSound.play();
-    hint.textContent = "you mean yes 😏";
-    yesScale += 0.25;
-    yesBtn.style.transform = `scale(${yesScale})`;
+    pop.play();
+    if (progress < 100) {
+      progress += 20;
+      fill.style.width = progress + "%";
+      message.textContent = messages[Math.min(progress / 20 - 1, messages.length - 1)];
+    }
+
+    if (progress >= 100) {
+      noBtn.style.display = "none";
+      message.textContent = "Looks like it’s already decided 💖";
+    }
   });
 
   yesBtn.addEventListener("click", () => {
-    yaySound.play();
-    document.body.innerHTML = "<h1 style='color:#ff2f6e;font-size:2.5rem;text-align:center;'>YAY 💖 YOU’RE MY VALENTINE 💖</h1>";
+    yay.play();
+    document.body.innerHTML = "<h1 style='color:#ff2f6e;text-align:center;'>I knew it 🥰💖</h1>";
 
     setInterval(() => {
       const heart = document.createElement("div");
-      heart.className = "heart-float";
+      heart.className = "heart";
       heart.textContent = "💗";
       heart.style.left = Math.random() * 100 + "vw";
       heart.style.fontSize = (20 + Math.random() * 30) + "px";
