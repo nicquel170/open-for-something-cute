@@ -1,168 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Will u be my Valentine? 💘</title>
 
 <style>
-  * {
-    box-sizing: border-box;
-    font-family: "Comic Sans MS", "Poppins", cursive;
-  }
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ffe3ec,#fff6fa);
+  font-family:"Comic Sans MS","Poppins",cursive;
+  overflow:hidden;
+}
+.container{
+  width:340px;
+  text-align:center;
+  position:relative;
+}
+h1{color:#d10052}
+.sub{min-height:28px;color:#b40045}
 
-  body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(135deg, #ffe3ec, #fff6fa);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
+.meter{
+  background:#fff;
+  height:20px;
+  border-radius:20px;
+  overflow:hidden;
+  margin:15px 0;
+}
+.fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#ff5c8a,#ff9bb5);
+  transition:.3s;
+}
 
-  .container {
-    text-align: center;
-    padding: 20px;
-    max-width: 340px;
-    position: relative;
-  }
+.buttons{
+  position:relative;
+  height:230px;
+}
 
-  h1 {
-    color: #d10052;
-    font-size: 2rem;
-  }
+/* BUTTONS */
+button{
+  position:absolute;
+  padding:12px 28px;
+  border:none;
+  border-radius:30px;
+  font-size:1.1rem;
+  cursor:pointer;
+  transition:.3s;
+}
+#noBtn{
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#bbb;
+}
+#yesBtn{
+  top:150px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#ff2f6e;
+  color:white;
+  box-shadow:0 0 14px rgba(255,47,110,.7);
+}
 
-  .sub {
-    color: #b40045;
-    font-size: 1.05rem;
-    min-height: 30px;
-    margin-top: 8px;
-  }
+/* 🧸 BEAR */
+.bear{
+  position:absolute;
+  top:80px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:90px;
+  animation:idle 1.6s infinite ease-in-out;
+  transition:.4s;
+  z-index:1;
+}
 
-  .meter {
-    margin: 22px 0 12px;
-    background: #fff;
-    border-radius: 30px;
-    overflow: hidden;
-    height: 22px;
-  }
+@keyframes idle{
+  0%,100%{transform:translate(-50%,0)}
+  50%{transform:translate(-50%,-8px)}
+}
 
-  .fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #ff5c8a, #ff9bb5);
-    transition: width 0.4s ease;
-  }
+/* bear hiding stages */
+.hide1{transform:translate(-50%,10px)}
+.hide2{transform:translate(-50%,22px)}
+.hide3{transform:translate(-50%,36px)}
+.hide4{transform:translate(-50%,50px)}
 
-  .buttons {
-    position: relative;
-    height: 210px;
-    margin-top: 10px;
+/* THROW */
+.throw{
+  animation:yeet .6s forwards;
+}
+@keyframes yeet{
+  to{
+    transform:translate(260px,-220px) rotate(720deg);
+    opacity:0;
   }
+}
 
-  button {
-    padding: 12px 30px;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    position: absolute;
-    transition: all 0.3s ease;
-    z-index: 2;
-  }
+/* HOLD YES */
+.hold{
+  transform:translate(-50%,-10px) scale(1.05);
+}
 
-  #yesBtn {
-    left: 50%;
-    top: 120px;
-    transform: translateX(-50%);
-    background: #ff2f6e;
-    color: white;
-    box-shadow: 0 0 14px rgba(255, 47, 110, 0.7);
-  }
+/* BLUSH HEARTS */
+.blush{
+  position:absolute;
+  font-size:14px;
+  animation:blush 1.6s infinite;
+}
+@keyframes blush{
+  0%{opacity:0;transform:translateY(0)}
+  50%{opacity:1}
+  100%{opacity:0;transform:translateY(-14px)}
+}
 
-  #noBtn {
-    left: 50%;
-    top: 20px;
-    transform: translateX(-50%);
-    background: #bbb;
-    color: #555;
-  }
-
-  /* 🧸 BEAR */
-  .bear {
-    position: absolute;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 88px;
-    transition: transform 0.4s ease;
-    animation: idle 1.8s infinite ease-in-out;
-    z-index: 1;
-  }
-
-  @keyframes idle {
-    0%,100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-6px); }
-  }
-
-  .hide1 { transform: translateX(-50%) translateY(6px); }
-  .hide2 { transform: translateX(-50%) translateY(16px); }
-  .hide3 { transform: translateX(-50%) translateY(26px); }
-  .hide4 { transform: translateX(-50%) translateY(36px); }
-
-  .throw {
-    animation: throwNo 0.6s ease forwards;
-  }
-
-  @keyframes throwNo {
-    to {
-      transform: translate(300px, -200px) rotate(720deg);
-      opacity: 0;
-    }
-  }
-
-  .bear-hold {
-    transform: translateX(-50%) scale(1.05);
-  }
-
-  .blush {
-    position: absolute;
-    font-size: 14px;
-    animation: blushFloat 1.8s infinite ease-in-out;
-  }
-
-  @keyframes blushFloat {
-    0% { opacity: 0; transform: translateY(0); }
-    50% { opacity: 1; }
-    100% { opacity: 0; transform: translateY(-14px); }
-  }
-
-  .big-heart {
-    position: fixed;
-    bottom: -30px;
-    font-size: 26px;
-    animation: floatUp 4s linear forwards;
-  }
-
-  @keyframes floatUp {
-    to {
-      transform: translateY(-120vh);
-      opacity: 0;
-    }
-  }
+/* BIG HEARTS AT END */
+.big-heart{
+  position:fixed;
+  bottom:-30px;
+  font-size:26px;
+  animation:floatUp 4s linear forwards;
+}
+@keyframes floatUp{
+  to{transform:translateY(-120vh);opacity:0}
+}
 </style>
 </head>
 
 <body>
-
 <div class="container">
   <h1>Will u be my Valentine? 💘</h1>
   <div class="sub" id="text">love meter 💗</div>
 
-  <div class="meter">
-    <div class="fill" id="fill"></div>
-  </div>
+  <div class="meter"><div class="fill" id="fill"></div></div>
 
   <div class="buttons">
     <button id="noBtn">NO 🙃</button>
@@ -175,61 +150,60 @@
 <audio id="yay" src="https://assets.mixkit.co/sfx/preview/mixkit-happy-pop-2060.mp3"></audio>
 
 <script>
-  const noBtn = document.getElementById("noBtn");
-  const yesBtn = document.getElementById("yesBtn");
-  const fill = document.getElementById("fill");
-  const text = document.getElementById("text");
-  const bear = document.getElementById("bear");
-  const boop = document.getElementById("boop");
-  const yay = document.getElementById("yay");
+const noBtn=document.getElementById("noBtn");
+const yesBtn=document.getElementById("yesBtn");
+const bear=document.getElementById("bear");
+const fill=document.getElementById("fill");
+const text=document.getElementById("text");
+const boop=document.getElementById("boop");
+const yay=document.getElementById("yay");
 
-  let presses = 0;
+let presses=0;
 
-  noBtn.addEventListener("click", () => {
-    boop.play();
-    presses++;
-    fill.style.width = (presses * 20) + "%";
-    text.textContent = "thought u cudda say no hehe";
+noBtn.onclick=()=>{
+  boop.play();
+  presses++;
+  fill.style.width=(presses*20)+"%";
+  text.textContent="thought u cudda say no hehe";
 
-    bear.className = "bear hide" + presses;
+  bear.className="bear hide"+presses;
 
-    if (presses === 5) {
-      noBtn.classList.add("throw");
+  if(presses===5){
+    noBtn.classList.add("throw");
 
-      setTimeout(() => {
-        noBtn.remove();
-        bear.className = "bear bear-hold";
-        yesBtn.style.top = "80px";
+    setTimeout(()=>{
+      noBtn.remove();
+      bear.className="bear hold";
+      yesBtn.style.top="100px";
 
-        // blush hearts
-        for (let i = 0; i < 2; i++) {
-          const b = document.createElement("div");
-          b.className = "blush";
-          b.textContent = "💗";
-          b.style.left = (50 + (i ? 18 : -18)) + "%";
-          b.style.top = "60px";
-          document.querySelector(".buttons").appendChild(b);
-        }
-      }, 600);
-    }
-  });
+      // blush hearts
+      for(let i=0;i<2;i++){
+        const h=document.createElement("div");
+        h.className="blush";
+        h.textContent="💗";
+        h.style.left=(50+(i?16:-16))+"%";
+        h.style.top="70px";
+        document.querySelector(".buttons").appendChild(h);
+      }
+    },600);
+  }
+};
 
-  yesBtn.addEventListener("click", () => {
-    yay.play();
-    document.body.innerHTML =
-      "<h1 style='color:#ff2f6e;text-align:center;font-size:2.4rem;'>YAYYY 💖<br>you’re my Valentine!!!</h1>";
+yesBtn.onclick=()=>{
+  yay.play();
+  document.body.innerHTML=
+  "<h1 style='color:#ff2f6e;text-align:center;font-size:2.4rem;'>YAYYY 💖<br>you’re my Valentine!!!</h1>";
 
-    setInterval(() => {
-      const h = document.createElement("div");
-      h.className = "big-heart";
-      h.textContent = "💗";
-      h.style.left = Math.random() * 100 + "vw";
-      h.style.fontSize = (22 + Math.random() * 30) + "px";
-      document.body.appendChild(h);
-      setTimeout(() => h.remove(), 4000);
-    }, 140);
-  });
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="big-heart";
+    h.textContent="💗";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=22+Math.random()*30+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  },140);
+};
 </script>
-
 </body>
 </html>
