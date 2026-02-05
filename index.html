@@ -1,209 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Will u be my Valentine? 💘</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will u be my Valentine? 💖</title>
 
 <style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#ffe3ec,#fff6fa);
-  font-family:"Comic Sans MS","Poppins",cursive;
-  overflow:hidden;
-}
-.container{
-  width:340px;
-  text-align:center;
-  position:relative;
-}
-h1{color:#d10052}
-.sub{min-height:28px;color:#b40045}
-
-.meter{
-  background:#fff;
-  height:20px;
-  border-radius:20px;
-  overflow:hidden;
-  margin:15px 0;
-}
-.fill{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#ff5c8a,#ff9bb5);
-  transition:.3s;
-}
-
-.buttons{
-  position:relative;
-  height:230px;
-}
-
-/* BUTTONS */
-button{
-  position:absolute;
-  padding:12px 28px;
-  border:none;
-  border-radius:30px;
-  font-size:1.1rem;
-  cursor:pointer;
-  transition:.3s;
-}
-#noBtn{
-  top:10px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#bbb;
-}
-#yesBtn{
-  top:150px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#ff2f6e;
-  color:white;
-  box-shadow:0 0 14px rgba(255,47,110,.7);
-}
-
-/* 🧸 BEAR */
-.bear{
-  position:absolute;
-  top:80px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:90px;
-  animation:idle 1.6s infinite ease-in-out;
-  transition:.4s;
-  z-index:1;
-}
-
-@keyframes idle{
-  0%,100%{transform:translate(-50%,0)}
-  50%{transform:translate(-50%,-8px)}
-}
-
-/* bear hiding stages */
-.hide1{transform:translate(-50%,10px)}
-.hide2{transform:translate(-50%,22px)}
-.hide3{transform:translate(-50%,36px)}
-.hide4{transform:translate(-50%,50px)}
-
-/* THROW */
-.throw{
-  animation:yeet .6s forwards;
-}
-@keyframes yeet{
-  to{
-    transform:translate(260px,-220px) rotate(720deg);
-    opacity:0;
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffe3ec, #fff6fa);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Comic Sans MS", "Poppins", cursive;
+    overflow: hidden;
   }
-}
 
-/* HOLD YES */
-.hold{
-  transform:translate(-50%,-10px) scale(1.05);
-}
+  .card {
+    text-align: center;
+    width: 320px;
+  }
 
-/* BLUSH HEARTS */
-.blush{
-  position:absolute;
-  font-size:14px;
-  animation:blush 1.6s infinite;
-}
-@keyframes blush{
-  0%{opacity:0;transform:translateY(0)}
-  50%{opacity:1}
-  100%{opacity:0;transform:translateY(-14px)}
-}
+  h1 {
+    color: #d10052;
+    font-size: 2rem;
+  }
 
-/* BIG HEARTS AT END */
-.big-heart{
-  position:fixed;
-  bottom:-30px;
-  font-size:26px;
-  animation:floatUp 4s linear forwards;
-}
-@keyframes floatUp{
-  to{transform:translateY(-120vh);opacity:0}
-}
+  .message {
+    color: #b40045;
+    min-height: 28px;
+    margin-top: 8px;
+  }
+
+  .lock {
+    font-size: 80px;
+    margin: 20px 0;
+    animation: pulse 1.6s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .wiggle {
+    animation: wiggle 0.4s;
+  }
+
+  @keyframes wiggle {
+    0% { transform: rotate(0); }
+    25% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+    75% { transform: rotate(-5deg); }
+    100% { transform: rotate(0); }
+  }
+
+  .slider-wrap {
+    margin-top: 20px;
+  }
+
+  input[type=range] {
+    width: 100%;
+    accent-color: #ff5c8a;
+  }
+
+  .labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #b40045;
+  }
+
+  .yes-btn {
+    display: none;
+    margin-top: 25px;
+    padding: 14px 34px;
+    font-size: 1.2rem;
+    background: #ff2f6e;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0 0 15px rgba(255,47,110,0.6);
+    cursor: pointer;
+  }
+
+  .heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 26px;
+    animation: floatUp 4s linear forwards;
+  }
+
+  @keyframes floatUp {
+    to {
+      transform: translateY(-120vh);
+      opacity: 0;
+    }
+  }
 </style>
 </head>
 
 <body>
-<div class="container">
+
+<div class="card">
   <h1>Will u be my Valentine? 💘</h1>
-  <div class="sub" id="text">love meter 💗</div>
+  <div class="message" id="msg">slide to unlock my heart 💗</div>
 
-  <div class="meter"><div class="fill" id="fill"></div></div>
+  <div class="lock" id="lock">💗🔒</div>
 
-  <div class="buttons">
-    <button id="noBtn">NO 🙃</button>
-    <button id="yesBtn">YES 💖</button>
-    <div class="bear" id="bear">🧸</div>
+  <div class="slider-wrap" id="sliderWrap">
+    <input type="range" id="slider" min="0" max="100" value="50">
+    <div class="labels">
+      <span>NO 🙃</span>
+      <span>YES 💖</span>
+    </div>
   </div>
+
+  <button class="yes-btn" id="yesBtn">YES 💖</button>
 </div>
 
-<audio id="boop" src="https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-alert-notification-2357.mp3"></audio>
-<audio id="yay" src="https://assets.mixkit.co/sfx/preview/mixkit-happy-pop-2060.mp3"></audio>
-
 <script>
-const noBtn=document.getElementById("noBtn");
-const yesBtn=document.getElementById("yesBtn");
-const bear=document.getElementById("bear");
-const fill=document.getElementById("fill");
-const text=document.getElementById("text");
-const boop=document.getElementById("boop");
-const yay=document.getElementById("yay");
+  const slider = document.getElementById("slider");
+  const lock = document.getElementById("lock");
+  const msg = document.getElementById("msg");
+  const yesBtn = document.getElementById("yesBtn");
+  const sliderWrap = document.getElementById("sliderWrap");
 
-let presses=0;
+  let tries = 0;
 
-noBtn.onclick=()=>{
-  boop.play();
-  presses++;
-  fill.style.width=(presses*20)+"%";
-  text.textContent="thought u cudda say no hehe";
+  const messages = [
+    "hmm… it’s stuck 🤭",
+    "why is it sliding back 😭",
+    "okay this is kinda cute",
+    "guess it wants YES 💘"
+  ];
 
-  bear.className="bear hide"+presses;
+  slider.addEventListener("input", () => {
+    if (slider.value < 60) {
+      tries++;
+      slider.value = 55;
+      lock.classList.add("wiggle");
 
-  if(presses===5){
-    noBtn.classList.add("throw");
+      msg.textContent = messages[Math.min(tries - 1, messages.length - 1)];
 
-    setTimeout(()=>{
-      noBtn.remove();
-      bear.className="bear hold";
-      yesBtn.style.top="100px";
+      setTimeout(() => lock.classList.remove("wiggle"), 300);
 
-      // blush hearts
-      for(let i=0;i<2;i++){
-        const h=document.createElement("div");
-        h.className="blush";
-        h.textContent="💗";
-        h.style.left=(50+(i?16:-16))+"%";
-        h.style.top="70px";
-        document.querySelector(".buttons").appendChild(h);
+      if (tries >= 4) {
+        unlock();
       }
-    },600);
+    }
+  });
+
+  function unlock() {
+    lock.textContent = "💗🔓";
+    msg.textContent = "guess it was meant to be 💖";
+    sliderWrap.style.display = "none";
+    yesBtn.style.display = "inline-block";
   }
-};
 
-yesBtn.onclick=()=>{
-  yay.play();
-  document.body.innerHTML=
-  "<h1 style='color:#ff2f6e;text-align:center;font-size:2.4rem;'>YAYYY 💖<br>you’re my Valentine!!!</h1>";
+  yesBtn.onclick = () => {
+    document.body.innerHTML =
+      "<h1 style='color:#ff2f6e;text-align:center;font-size:2.4rem;'>YAYYY 💖<br>you’re my Valentine!!!</h1>";
 
-  setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="big-heart";
-    h.textContent="💗";
-    h.style.left=Math.random()*100+"vw";
-    h.style.fontSize=22+Math.random()*30+"px";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),4000);
-  },140);
-};
+    setInterval(() => {
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = "💗";
+      h.style.left = Math.random() * 100 + "vw";
+      h.style.fontSize = (22 + Math.random() * 30) + "px";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 4000);
+    }, 140);
+  };
 </script>
+
 </body>
 </html>
