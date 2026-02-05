@@ -46,7 +46,6 @@
     border-radius: 30px;
     overflow: hidden;
     height: 22px;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
   }
 
   .fill {
@@ -56,22 +55,10 @@
     transition: width 0.4s ease;
   }
 
-  .wiggle {
-    animation: wiggle 0.4s ease;
-  }
-
-  @keyframes wiggle {
-    0% { transform: rotate(0); }
-    25% { transform: rotate(-1deg); }
-    50% { transform: rotate(1deg); }
-    75% { transform: rotate(-1deg); }
-    100% { transform: rotate(0); }
-  }
-
   .buttons {
-    margin-top: 30px;
     position: relative;
-    height: 190px;
+    height: 210px;
+    margin-top: 10px;
   }
 
   button {
@@ -81,48 +68,74 @@
     border-radius: 30px;
     cursor: pointer;
     position: absolute;
-    transition: all 0.25s ease;
+    transition: all 0.3s ease;
+    z-index: 2;
   }
 
   #yesBtn {
     left: 50%;
-    top: 100px;
+    top: 120px;
     transform: translateX(-50%);
     background: #ff2f6e;
     color: white;
     box-shadow: 0 0 14px rgba(255, 47, 110, 0.7);
-    z-index: 3;
   }
 
   #noBtn {
     left: 50%;
-    top: 10px;
+    top: 20px;
     transform: translateX(-50%);
     background: #bbb;
     color: #555;
   }
 
-  .bounce {
-    animation: bounce 0.25s ease;
+  /* 🧸 BEAR */
+  .bear {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 88px;
+    transition: transform 0.4s ease;
+    animation: idle 1.8s infinite ease-in-out;
+    z-index: 1;
   }
 
-  @keyframes bounce {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.12); }
-    100% { transform: scale(1); }
+  @keyframes idle {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-6px); }
   }
 
-  .heart-pop {
-    position: fixed;
-    font-size: 20px;
-    animation: popFloat 3s ease forwards;
+  .hide1 { transform: translateX(-50%) translateY(6px); }
+  .hide2 { transform: translateX(-50%) translateY(16px); }
+  .hide3 { transform: translateX(-50%) translateY(26px); }
+  .hide4 { transform: translateX(-50%) translateY(36px); }
+
+  .throw {
+    animation: throwNo 0.6s ease forwards;
   }
 
-  @keyframes popFloat {
+  @keyframes throwNo {
     to {
-      transform: translateY(-120px) scale(1.5);
+      transform: translate(300px, -200px) rotate(720deg);
       opacity: 0;
     }
+  }
+
+  .bear-hold {
+    transform: translateX(-50%) scale(1.05);
+  }
+
+  .blush {
+    position: absolute;
+    font-size: 14px;
+    animation: blushFloat 1.8s infinite ease-in-out;
+  }
+
+  @keyframes blushFloat {
+    0% { opacity: 0; transform: translateY(0); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-14px); }
   }
 
   .big-heart {
@@ -138,35 +151,6 @@
       opacity: 0;
     }
   }
-
-  /* 🧸 BIG BLUSH BEAR */
-  .bear {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 90px;
-    animation: bearPop 0.6s ease;
-    z-index: 2;
-  }
-
-  .bear::after {
-    content: "💖 💖";
-    display: block;
-    font-size: 16px;
-    animation: floatHearts 2s infinite ease-in-out;
-  }
-
-  @keyframes bearPop {
-    from { transform: translateX(-50%) scale(0); }
-    to { transform: translateX(-50%) scale(1); }
-  }
-
-  @keyframes floatHearts {
-    0% { opacity: 0; transform: translateY(0); }
-    50% { opacity: 1; }
-    100% { opacity: 0; transform: translateY(-20px); }
-  }
 </style>
 </head>
 
@@ -176,13 +160,14 @@
   <h1>Will u be my Valentine? 💘</h1>
   <div class="sub" id="text">love meter 💗</div>
 
-  <div class="meter" id="meter">
+  <div class="meter">
     <div class="fill" id="fill"></div>
   </div>
 
-  <div class="buttons" id="buttons">
+  <div class="buttons">
     <button id="noBtn">NO 🙃</button>
     <button id="yesBtn">YES 💖</button>
+    <div class="bear" id="bear">🧸</div>
   </div>
 </div>
 
@@ -193,50 +178,39 @@
   const noBtn = document.getElementById("noBtn");
   const yesBtn = document.getElementById("yesBtn");
   const fill = document.getElementById("fill");
-  const meter = document.getElementById("meter");
   const text = document.getElementById("text");
-  const buttons = document.getElementById("buttons");
+  const bear = document.getElementById("bear");
   const boop = document.getElementById("boop");
   const yay = document.getElementById("yay");
 
-  let progress = 0;
-  let noScale = 1;
-
-  const positions = [
-    { left: "10%", top: "10px" },
-    { left: "60%", top: "10px" },
-    { left: "15%", top: "80px" },
-    { left: "65%", top: "80px" },
-    { left: "40%", top: "35px" }
-  ];
+  let presses = 0;
 
   noBtn.addEventListener("click", () => {
     boop.play();
+    presses++;
+    fill.style.width = (presses * 20) + "%";
     text.textContent = "thought u cudda say no hehe";
 
-    progress += 20;
-    fill.style.width = progress + "%";
+    bear.className = "bear hide" + presses;
 
-    meter.classList.add("wiggle");
-    setTimeout(() => meter.classList.remove("wiggle"), 400);
+    if (presses === 5) {
+      noBtn.classList.add("throw");
 
-    const pos = positions[Math.floor(Math.random() * positions.length)];
-    noBtn.style.left = pos.left;
-    noBtn.style.top = pos.top;
+      setTimeout(() => {
+        noBtn.remove();
+        bear.className = "bear bear-hold";
+        yesBtn.style.top = "80px";
 
-    noScale -= 0.08;
-    noBtn.style.transform = `scale(${noScale})`;
-
-    noBtn.classList.add("bounce");
-    setTimeout(() => noBtn.classList.remove("bounce"), 250);
-
-    if (progress >= 100) {
-      noBtn.remove();
-
-      const bear = document.createElement("div");
-      bear.className = "bear";
-      bear.textContent = "🧸💕";
-      buttons.appendChild(bear);
+        // blush hearts
+        for (let i = 0; i < 2; i++) {
+          const b = document.createElement("div");
+          b.className = "blush";
+          b.textContent = "💗";
+          b.style.left = (50 + (i ? 18 : -18)) + "%";
+          b.style.top = "60px";
+          document.querySelector(".buttons").appendChild(b);
+        }
+      }, 600);
     }
   });
 
