@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Something for You 💗</title>
+<title>Will u be my Valentine? 💘</title>
 
 <style>
   * {
@@ -14,7 +14,7 @@
   body {
     margin: 0;
     height: 100vh;
-    background: linear-gradient(135deg, #ffe4ec, #fff0f5);
+    background: linear-gradient(135deg, #ffe3ec, #fff6fa);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,54 +24,96 @@
   .container {
     text-align: center;
     padding: 20px;
-    max-width: 320px;
+    max-width: 340px;
+    position: relative;
   }
 
   h1 {
-    color: #c4004a;
-    font-size: 1.8rem;
-    min-height: 70px;
+    color: #d10052;
+    font-size: 2rem;
   }
 
-  .shy-heart {
-    font-size: 3rem;
-    margin: 15px 0;
-    transition: transform 0.4s ease, opacity 0.4s ease;
+  .sub {
+    color: #b40045;
+    font-size: 1.1rem;
+    min-height: 32px;
+    margin-top: 8px;
+  }
+
+  .meter {
+    margin: 22px 0 12px;
+    background: #fff;
+    border-radius: 30px;
+    overflow: hidden;
+    height: 22px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+  }
+
+  .fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff5c8a, #ff9bb5);
+    transition: width 0.4s ease;
+  }
+
+  .wiggle {
+    animation: wiggle 0.4s ease;
+  }
+
+  @keyframes wiggle {
+    0% { transform: rotate(0); }
+    25% { transform: rotate(-1deg); }
+    50% { transform: rotate(1deg); }
+    75% { transform: rotate(-1deg); }
+    100% { transform: rotate(0); }
   }
 
   .buttons {
     margin-top: 20px;
+    position: relative;
+    height: 80px;
   }
 
   button {
-    padding: 12px 26px;
-    font-size: 1.05rem;
+    padding: 12px 30px;
+    font-size: 1.1rem;
     border: none;
-    border-radius: 25px;
+    border-radius: 30px;
     cursor: pointer;
-    margin: 8px;
+    position: absolute;
   }
 
   #yesBtn {
-    background: #ff4f81;
+    left: 50%;
+    transform: translateX(-120%);
+    background: #ff2f6e;
     color: white;
-    box-shadow: 0 0 10px rgba(255, 79, 129, 0.5);
-    transition: box-shadow 0.4s ease;
-  }
-
-  #yesBtn.glow {
-    box-shadow: 0 0 18px rgba(255, 79, 129, 0.9);
+    box-shadow: 0 0 12px rgba(255, 47, 110, 0.6);
   }
 
   #noBtn {
-    background: #ccc;
+    left: 50%;
+    transform: translateX(20%);
+    background: #bbb;
     color: #555;
+    transition: transform 0.25s ease;
   }
 
-  .heart {
+  .heart-pop {
     position: fixed;
-    bottom: -20px;
-    font-size: 22px;
+    font-size: 20px;
+    animation: popFloat 3s ease forwards;
+  }
+
+  @keyframes popFloat {
+    from { transform: translateY(0) scale(1); opacity: 1; }
+    to { transform: translateY(-120px) scale(1.5); opacity: 0; }
+  }
+
+  .big-heart {
+    position: fixed;
+    bottom: -30px;
+    font-size: 26px;
     animation: floatUp 4s linear forwards;
   }
 
@@ -87,54 +129,87 @@
 <body>
 
 <div class="container">
-  <h1 id="text">I wanted to ask you something…</h1>
+  <h1>Will u be my Valentine? 💘</h1>
+  <div class="sub" id="text">love meter 💗</div>
 
-  <div class="shy-heart" id="shyHeart">💗</div>
+  <div class="meter" id="meter">
+    <div class="fill" id="fill"></div>
+  </div>
 
   <div class="buttons">
-    <button id="yesBtn">Yes?</button>
-    <button id="noBtn">No…</button>
+    <button id="yesBtn">YES 💖</button>
+    <button id="noBtn">NO 🙃</button>
   </div>
 </div>
 
+<audio id="boop" src="https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-alert-notification-2357.mp3"></audio>
+<audio id="yay" src="https://assets.mixkit.co/sfx/preview/mixkit-happy-pop-2060.mp3"></audio>
+
 <script>
-  const text = document.getElementById("text");
-  const heart = document.getElementById("shyHeart");
-  const yesBtn = document.getElementById("yesBtn");
   const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const fill = document.getElementById("fill");
+  const meter = document.getElementById("meter");
+  const text = document.getElementById("text");
+  const boop = document.getElementById("boop");
+  const yay = document.getElementById("yay");
 
-  let noCount = 0;
+  let progress = 0;
+  let noPush = 20;
 
-  const noTexts = [
-    "oh—okay…",
-    "maybe I asked too fast…",
-    "I just think you’re really special…",
-    "it’s okay… you don’t have to decide yet 💗"
+  const messages = [
+    "hmm… my heart disagrees 🤭",
+    "wait why is this kinda cute 🥺",
+    "okay I’m smiling now 😳",
+    "yeahhh this is destiny 💗",
+    "my heart already chose 💕"
   ];
 
-  noBtn.addEventListener("click", () => {
-    noCount++;
-    heart.style.transform = "scale(0.8)";
-    heart.style.opacity = "0.7";
-    text.textContent = noTexts[Math.min(noCount - 1, noTexts.length - 1)];
+  function pushNo() {
+    boop.play();
+    noPush += 15;
+    noBtn.style.transform = `translateX(${noPush}%)`;
+  }
 
-    if (noCount >= 3) {
-      yesBtn.classList.add("glow");
+  noBtn.addEventListener("click", () => {
+    if (progress < 100) {
+      progress += 20;
+      fill.style.width = progress + "%";
+      text.textContent = messages[Math.min(progress / 20 - 1, messages.length - 1)];
+
+      meter.classList.add("wiggle");
+      setTimeout(() => meter.classList.remove("wiggle"), 400);
+
+      pushNo();
+
+      const heart = document.createElement("div");
+      heart.className = "heart-pop";
+      heart.textContent = "💗";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.bottom = "60px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 3000);
+    }
+
+    if (progress >= 100) {
+      noBtn.style.display = "none";
     }
   });
 
   yesBtn.addEventListener("click", () => {
-    document.body.innerHTML = "<h1 style='color:#ff4f81;text-align:center;'>thank you for making my day 💕<br>will you be my valentine?</h1>";
+    yay.play();
+    document.body.innerHTML =
+      "<h1 style='color:#ff2f6e;text-align:center;font-size:2.4rem;'>YAYYY 💖<br>you’re my Valentine!!!</h1>";
 
     setInterval(() => {
       const h = document.createElement("div");
-      h.className = "heart";
+      h.className = "big-heart";
       h.textContent = "💗";
       h.style.left = Math.random() * 100 + "vw";
-      h.style.fontSize = (20 + Math.random() * 30) + "px";
+      h.style.fontSize = (22 + Math.random() * 30) + "px";
       document.body.appendChild(h);
       setTimeout(() => h.remove(), 4000);
-    }, 180);
+    }, 140);
   });
 </script>
 
