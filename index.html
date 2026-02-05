@@ -69,9 +69,9 @@
   }
 
   .buttons {
-    margin-top: 24px;
+    margin-top: 30px;
     position: relative;
-    height: 160px;
+    height: 190px;
   }
 
   button {
@@ -86,17 +86,17 @@
 
   #yesBtn {
     left: 50%;
-    top: 90px;
+    top: 100px;
     transform: translateX(-50%);
     background: #ff2f6e;
     color: white;
-    box-shadow: 0 0 12px rgba(255, 47, 110, 0.6);
-    z-index: 2;
+    box-shadow: 0 0 14px rgba(255, 47, 110, 0.7);
+    z-index: 3;
   }
 
   #noBtn {
     left: 50%;
-    top: 20px;
+    top: 10px;
     transform: translateX(-50%);
     background: #bbb;
     color: #555;
@@ -108,7 +108,7 @@
 
   @keyframes bounce {
     0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.12); }
     100% { transform: scale(1); }
   }
 
@@ -119,8 +119,10 @@
   }
 
   @keyframes popFloat {
-    from { transform: translateY(0) scale(1); opacity: 1; }
-    to { transform: translateY(-120px) scale(1.5); opacity: 0; }
+    to {
+      transform: translateY(-120px) scale(1.5);
+      opacity: 0;
+    }
   }
 
   .big-heart {
@@ -137,20 +139,33 @@
     }
   }
 
-  /* 🧸 Bear */
+  /* 🧸 BIG BLUSH BEAR */
   .bear {
     position: absolute;
-    bottom: 10px;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 48px;
+    font-size: 90px;
     animation: bearPop 0.6s ease;
-    z-index: 1;
+    z-index: 2;
+  }
+
+  .bear::after {
+    content: "💖 💖";
+    display: block;
+    font-size: 16px;
+    animation: floatHearts 2s infinite ease-in-out;
   }
 
   @keyframes bearPop {
     from { transform: translateX(-50%) scale(0); }
     to { transform: translateX(-50%) scale(1); }
+  }
+
+  @keyframes floatHearts {
+    0% { opacity: 0; transform: translateY(0); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-20px); }
   }
 </style>
 </head>
@@ -187,13 +202,12 @@
   let progress = 0;
   let noScale = 1;
 
-  // 📍 5 friendly tap spots
   const positions = [
     { left: "10%", top: "10px" },
     { left: "60%", top: "10px" },
-    { left: "15%", top: "70px" },
-    { left: "65%", top: "70px" },
-    { left: "40%", top: "30px" }
+    { left: "15%", top: "80px" },
+    { left: "65%", top: "80px" },
+    { left: "40%", top: "35px" }
   ];
 
   noBtn.addEventListener("click", () => {
@@ -216,21 +230,12 @@
     noBtn.classList.add("bounce");
     setTimeout(() => noBtn.classList.remove("bounce"), 250);
 
-    const heart = document.createElement("div");
-    heart.className = "heart-pop";
-    heart.textContent = "💗";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.bottom = "60px";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 3000);
-
     if (progress >= 100) {
       noBtn.remove();
 
-      // 🧸 Bear appears holding YES
       const bear = document.createElement("div");
       bear.className = "bear";
-      bear.textContent = "🧸💖";
+      bear.textContent = "🧸💕";
       buttons.appendChild(bear);
     }
   });
