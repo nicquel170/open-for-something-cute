@@ -25,7 +25,6 @@
     text-align: center;
     padding: 20px;
     max-width: 340px;
-    position: relative;
   }
 
   h1 {
@@ -35,8 +34,8 @@
 
   .sub {
     color: #b40045;
-    font-size: 1.1rem;
-    min-height: 32px;
+    font-size: 1.05rem;
+    min-height: 30px;
     margin-top: 8px;
   }
 
@@ -81,6 +80,7 @@
     border-radius: 30px;
     cursor: pointer;
     position: absolute;
+    transition: transform 0.2s ease;
   }
 
   #yesBtn {
@@ -96,7 +96,16 @@
     transform: translateX(20%);
     background: #bbb;
     color: #555;
-    transition: transform 0.25s ease;
+  }
+
+  .squish {
+    animation: squish 0.25s ease;
+  }
+
+  @keyframes squish {
+    0% { transform: translateX(20%) scale(1); }
+    50% { transform: translateX(20%) scale(0.85); }
+    100% { transform: translateX(20%) scale(1); }
   }
 
   .heart-pop {
@@ -155,41 +164,28 @@
   const yay = document.getElementById("yay");
 
   let progress = 0;
-  let noPush = 20;
-
-  const messages = [
-    "hmm… my heart disagrees 🤭",
-    "wait why is this kinda cute 🥺",
-    "okay I’m smiling now 😳",
-    "yeahhh this is destiny 💗",
-    "my heart already chose 💕"
-  ];
-
-  function pushNo() {
-    boop.play();
-    noPush += 15;
-    noBtn.style.transform = `translateX(${noPush}%)`;
-  }
 
   noBtn.addEventListener("click", () => {
-    if (progress < 100) {
-      progress += 20;
-      fill.style.width = progress + "%";
-      text.textContent = messages[Math.min(progress / 20 - 1, messages.length - 1)];
+    boop.play();
 
-      meter.classList.add("wiggle");
-      setTimeout(() => meter.classList.remove("wiggle"), 400);
+    text.textContent = "thought u cudda say no hehe";
 
-      pushNo();
+    progress += 20;
+    fill.style.width = progress + "%";
 
-      const heart = document.createElement("div");
-      heart.className = "heart-pop";
-      heart.textContent = "💗";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.bottom = "60px";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 3000);
-    }
+    meter.classList.add("wiggle");
+    noBtn.classList.add("squish");
+
+    setTimeout(() => noBtn.classList.remove("squish"), 250);
+
+    // tiny heart pop
+    const heart = document.createElement("div");
+    heart.className = "heart-pop";
+    heart.textContent = "💗";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.bottom = "60px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 3000);
 
     if (progress >= 100) {
       noBtn.style.display = "none";
