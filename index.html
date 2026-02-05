@@ -3,91 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Will u be my Valentine? 💖</title>
-
+<title>Will you be my Valentine? 💘</title>
 <style>
   body {
     margin: 0;
-    height: 100vh;
+    padding: 0;
+    font-family: "Comic Sans MS", cursive, sans-serif;
     background: linear-gradient(135deg, #ffe3ec, #fff6fa);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "Comic Sans MS", "Poppins", cursive;
+    height: 100vh;
     overflow: hidden;
-  }
-
-  .card {
     text-align: center;
-    width: 320px;
   }
 
   h1 {
     color: #d10052;
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
-  .message {
-    color: #b40045;
-    min-height: 28px;
-    margin-top: 8px;
-  }
-
-  .lock {
-    font-size: 80px;
-    margin: 20px 0;
-    animation: pulse 1.6s infinite;
-  }
-
-  @keyframes pulse {
-    0%,100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-
-  .wiggle {
-    animation: wiggle 0.4s;
-  }
-
-  @keyframes wiggle {
-    0% { transform: rotate(0); }
-    25% { transform: rotate(-5deg); }
-    50% { transform: rotate(5deg); }
-    75% { transform: rotate(-5deg); }
-    100% { transform: rotate(0); }
-  }
-
-  .slider-wrap {
-    margin-top: 20px;
-  }
-
-  input[type=range] {
-    width: 100%;
-    accent-color: #ff5c8a;
-  }
-
-  .labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    color: #b40045;
-  }
-
-  .yes-btn {
-    display: none;
-    margin-top: 25px;
-    padding: 14px 34px;
+  .btn {
+    padding: 14px 32px;
     font-size: 1.2rem;
-    background: #ff2f6e;
-    color: white;
     border: none;
     border-radius: 30px;
-    box-shadow: 0 0 15px rgba(255,47,110,0.6);
+    margin: 12px;
     cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+
+  #yesBtn {
+    background: #ff2f6e;
+    color: white;
+    box-shadow: 0 4px 8px rgba(255, 47, 110, 0.5);
+  }
+
+  #noBtn {
+    background: #bbb;
+    color: #555;
+  }
+
+  .shake {
+    animation: shake 0.4s ease;
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-8px) rotate(-5deg); }
+    50% { transform: translateX(8px) rotate(5deg); }
+    75% { transform: translateX(-6px) rotate(-3deg); }
+    100% { transform: translateX(0); }
   }
 
   .heart {
     position: fixed;
-    bottom: -20px;
+    bottom: -30px;
     font-size: 26px;
     animation: floatUp 4s linear forwards;
   }
@@ -100,79 +71,49 @@
   }
 </style>
 </head>
-
 <body>
 
-<div class="card">
-  <h1>Will u be my Valentine? 💘</h1>
-  <div class="message" id="msg">slide to unlock my heart 💗</div>
+<h1 id="question">Will you be my Valentine? 💘</h1>
 
-  <div class="lock" id="lock">💗🔒</div>
-
-  <div class="slider-wrap" id="sliderWrap">
-    <input type="range" id="slider" min="0" max="100" value="50">
-    <div class="labels">
-      <span>NO 🙃</span>
-      <span>YES 💖</span>
-    </div>
-  </div>
-
-  <button class="yes-btn" id="yesBtn">YES 💖</button>
-</div>
+<button id="yesBtn" class="btn">YES 💖</button>
+<button id="noBtn" class="btn">NO 🙃</button>
 
 <script>
-  const slider = document.getElementById("slider");
-  const lock = document.getElementById("lock");
-  const msg = document.getElementById("msg");
   const yesBtn = document.getElementById("yesBtn");
-  const sliderWrap = document.getElementById("sliderWrap");
+  const noBtn = document.getElementById("noBtn");
+  const question = document.getElementById("question");
+  let noPressCount = 0;
 
-  let tries = 0;
+  noBtn.addEventListener("click", () => {
+    noPressCount++;
+    noBtn.classList.add("shake");
+    setTimeout(() => noBtn.classList.remove("shake"), 400);
 
-  const messages = [
-    "hmm… it’s stuck 🤭",
-    "why is it sliding back 😭",
-    "okay this is kinda cute",
-    "guess it wants YES 💘"
-  ];
-
-  slider.addEventListener("input", () => {
-    if (slider.value < 60) {
-      tries++;
-      slider.value = 55;
-      lock.classList.add("wiggle");
-
-      msg.textContent = messages[Math.min(tries - 1, messages.length - 1)];
-
-      setTimeout(() => lock.classList.remove("wiggle"), 300);
-
-      if (tries >= 4) {
-        unlock();
-      }
+    if (noPressCount === 1) {
+      question.textContent = "Hmm… I thought you'd choose love 😏";
+    } else if (noPressCount === 2) {
+      question.textContent = "Are you sure? 💕";
+    } else if (noPressCount === 3) {
+      question.textContent = "Maybe give YES a second thought? 😊";
+    } else {
+      question.textContent = "Alright… you know you want to 😌";
     }
   });
 
-  function unlock() {
-    lock.textContent = "💗🔓";
-    msg.textContent = "guess it was meant to be 💖";
-    sliderWrap.style.display = "none";
-    yesBtn.style.display = "inline-block";
-  }
-
-  yesBtn.onclick = () => {
+  yesBtn.addEventListener("click", () => {
     document.body.innerHTML =
-      "<h1 style='color:#ff2f6e;text-align:center;font-size:2.4rem;'>YAYYY 💖<br>you’re my Valentine!!!</h1>";
+      "<h1 style='color:#ff2f6e;font-size:2.6rem;'>YAYYYY 💖 You're my Valentine!!!</h1>";
 
     setInterval(() => {
       const h = document.createElement("div");
       h.className = "heart";
       h.textContent = "💗";
       h.style.left = Math.random() * 100 + "vw";
-      h.style.fontSize = (22 + Math.random() * 30) + "px";
+      h.style.fontSize = (22 + Math.random() * 40) + "px";
       document.body.appendChild(h);
       setTimeout(() => h.remove(), 4000);
-    }, 140);
-  };
+    }, 120);
+  });
 </script>
 
 </body>
